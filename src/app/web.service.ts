@@ -24,7 +24,7 @@ export class WebService {
   }
 
   public getFlights(page = 0, size = 10, sort = "scheduledAt,desc") {
-    const url = `${this.baseUrl}/flight?page=${page}&size=${sort}&sort=${sort}type=departure`
+    const url = `${this.baseUrl}/flight?page=${page}&size=${size}&sort=${sort}&type=departure`
     return this.client.get<PageModel<FlightModel>>(url)
   }
 

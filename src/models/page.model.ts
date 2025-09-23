@@ -16,7 +16,7 @@ export interface PageModel<T>{
     },
     totalPages: number,
     totalElements: number,
-    lastL: boolean,
+    last: boolean,
     size: number,
     number: number,
     sort: {
