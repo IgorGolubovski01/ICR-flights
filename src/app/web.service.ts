@@ -8,6 +8,7 @@ import { PageModel } from '../models/page.model';
 })
 export class WebService {
 
+  private static instance: WebService
   private baseUrl: string
   private client: HttpClient
 
@@ -16,17 +17,40 @@ export class WebService {
     this.client = inject(HttpClient)
   }
 
-  public getRecommendedFlights() {
-    const url = `${this.baseUrl}/flight?page=0&size=3&sort=scheduledAt,desc&type=departure`
+  public static getInstance() {
+    if (this.instance == undefined)
+      this.instance = new WebService()
+    return this.instance
+  }
+
+  public getFlights(page = 0, size = 10, sort = "scheduledAt,desc") {
+    const url = `${this.baseUrl}/flight?page=${page}&size=${sort}&sort=${sort}type=departure`
     return this.client.get<PageModel<FlightModel>>(url)
   }
 
-  public getFlightById(id: number){
+  public getRecommendedFlights() {
+    return this.getFlights(0, 3)
+  }
+
+  public getFlightById(id: number) {
     const url = `${this.baseUrl}/flight/${id}`
     return this.client.get<FlightModel>(url)
   }
 
-    public getDestinationImage(dest: string) {
+  public getDestinationImage(dest: string) {
     return 'https://img.pequla.com/destination/' + dest.split(" ")[0].toLowerCase() + '.jpg'
   }
+
+  public formatDate(iso: string | null | number) {
+    if (iso == null) return 'On Time'
+    return new Date(iso).toLocaleString('sr-RS')
+  }
+
+  public formatValue(str: string | null) {
+    if (str == null) return "N/A"
+    return str
+  }
+
+
+
 }
